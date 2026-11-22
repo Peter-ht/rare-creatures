@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../firebase/config.js";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ export default function Login() {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("Logged in successfully!");
     } catch (err) {
-      setError("Invalid email or password. Please try again.");
+      setError(err.message || "Unable to sign in. Please try again.");
     } finally {
       setLoading(false);
     }
