@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { signOut } from 'firebase/auth'
 import { Link } from 'react-router'
 import { auth } from '../firebase/config'
+import MainContent from '../firebase/maincontent'
 
 export default function Dashboard({ user }) {
   const [logoutError, setLogoutError] = useState('')
@@ -53,6 +54,7 @@ export default function Dashboard({ user }) {
             {logoutError}
           </p>
         )}
+        <MainContent />
       </main>
     </div>
   )
