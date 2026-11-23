@@ -64,10 +64,15 @@ function AuthenticationPage() {
 function App() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [authError, setAuthError] = useState('')
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser)
+      setLoading(false)
+      setAuthError('')
+    }, (error) => {
+      setAuthError(error.message || 'Unable to check your sign-in status.')
       setLoading(false)
     })
     return unsubscribe
@@ -75,6 +80,21 @@ function App() {
 
   if (loading) {
     return <LoadingScreen />
+  }
+
+  if (authError) {
+    return (
+      <main className='min-h-screen flex flex-col items-center justify-center gap-4 bg-gray-50 px-4 text-center'>
+        <p className='text-red-700' role='alert'>{authError}</p>
+        <button
+          className='rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700'
+          onClick={() => window.location.reload()}
+          type='button'
+        >
+          Try again
+        </button>
+      </main>
+    )
   }
 
   return (

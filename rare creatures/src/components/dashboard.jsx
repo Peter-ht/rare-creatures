@@ -1,83 +1,59 @@
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase/config";
+import { useState } from 'react'
+import { signOut } from 'firebase/auth'
+import { Link } from 'react-router'
+import { auth } from '../firebase/config'
 
 export default function Dashboard({ user }) {
-  const handleLogout = async () => {
+  const [logoutError, setLogoutError] = useState('')
+  const [loggingOut, setLoggingOut] = useState(false)
+
+  async function handleLogout() {
+    setLogoutError('')
+    setLoggingOut(true)
+
     try {
-      await signOut(auth);
+      await signOut(auth)
     } catch (error) {
-      console.error("Error logging out:", error);
+      setLogoutError(error.message || 'Unable to sign out. Please try again.')
+    } finally {
+      setLoggingOut(false)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      
-      <nav className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <span className="text-xl font-bold text-blue-600">MyApp</span>
-          
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600 hidden sm:inline">
+    <div className='min-h-screen bg-stone-50'>
+      <header className='border-b border-stone-200 bg-white'>
+        <nav
+          aria-label='Main navigation'
+          className='mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8'
+        >
+          <Link className='flex items-center gap-2 font-extrabold tracking-tight text-emerald-900' to='/dashboard'>
+            <span aria-hidden='true' className='text-2xl'>🌿</span>
+            <span>Rare Creatures</span>
+          </Link>
+          <div className='flex items-center gap-3'>
+            <span className='hidden max-w-64 truncate text-sm text-stone-600 sm:inline' title={user?.email}>
               {user?.email}
             </span>
             <button
+              className='rounded-lg border border-stone-300 px-3.5 py-2 text-sm font-semibold text-stone-700 transition hover:bg-stone-100 disabled:cursor-wait disabled:opacity-60'
+              disabled={loggingOut}
               onClick={handleLogout}
-              className="bg-red-50 hover:bg-red-100 text-red-600 text-sm font-medium px-4 py-2 rounded-lg transition duration-200"
+              type='button'
             >
-              Log Out
+              {loggingOut ? 'Signing out...' : 'Sign out'}
             </button>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
-    
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Welcome back!
-          </h1>
-          <p className="text-gray-600">
-            You are signed in with <span className="font-medium text-gray-900">{user?.email}</span>.
+      <main className='mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8'>
+        {logoutError && (
+          <p className='mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800' role='alert'>
+            {logoutError}
           </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
-              Account Details
-            </h2>
-            <div className="space-y-2 text-sm">
-              <p className="text-gray-600">
-                <span className="font-medium text-gray-900">User ID:</span> {user?.uid}
-              </p>
-              <p className="text-gray-600">
-                <span className="font-medium text-gray-900">Email Verified:</span>{" "}
-                {user?.emailVerified ? (
-                  <span className="text-green-600 font-medium">Yes</span>
-                ) : (
-                  <span className="text-amber-600 font-medium">No</span>
-                )}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
-              Quick Actions
-            </h2>
-            <p className="text-sm text-gray-600 mb-4">
-              Your protected app features, charts, or database items go here.
-            </p>
-            <button
-              onClick={handleLogout}
-              className="w-full sm:w-auto bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
-            >
-              Sign Out of Session
-            </button>
-          </div>
-        </div>
+        )}
       </main>
     </div>
-  );
+  )
 }
