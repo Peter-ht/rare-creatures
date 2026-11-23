@@ -21,4 +21,18 @@
 - HTML 
 - FIGMA 
 
+- figma link
+'https://www.figma.com/design/cxzmxWmTZFZZdhsIec8Bbs/Untitled?node-id=0-1&t=M6xLOL2aErS89vBI-1'
+
+---
+
+## Deployment
+- deployed using github pages
+link :''
+
+## How to be able to access my repository components
+1. first you have to fork the repository
+2. second you have to clone the repository
+3. you have to install the dependecies by :
+    npm install 
 
