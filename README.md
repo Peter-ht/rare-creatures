@@ -28,7 +28,7 @@
 
 ## Deployment
 - deployed using github pages
-link :''
+link :'https://rare-creatures.vercel.app'
 
 ## How to be able to access my repository components
 1. first you have to fork the repository
